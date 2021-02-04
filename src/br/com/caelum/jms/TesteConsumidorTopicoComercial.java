@@ -1,5 +1,7 @@
 package br.com.caelum.jms;
 
+import br.com.caelum.modelo.Pedido;
+
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -25,9 +27,10 @@ public class TesteConsumidorTopicoComercial {
             @Override
             public void onMessage(Message message) {
                 //Pegar apenas a mensagem do envio
-                TextMessage textMessage = (TextMessage) message;
+                ObjectMessage objectMessage = (ObjectMessage) message;
                 try {
-                    System.out.println(textMessage.getText());
+                    Pedido pedido = (Pedido) objectMessage.getObject();
+                    System.out.println(pedido.getCodigo());
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }

@@ -29,11 +29,11 @@ public class TesteProdutorTopico {
         MessageProducer producer = session.createProducer(topico);
 
         Pedido pedido = new PedidoFactory().geraPedidoComValores();
-        StringWriter writer = new StringWriter();
-        JAXB.marshal(pedido, writer); //recebe o pedido e escreve para enviar a string xml
+//        StringWriter writer = new StringWriter();
+//        JAXB.marshal(pedido, writer); //recebe o pedido e escreve para enviar a string xml
+//        String xml = writer.toString();
 
-        String xml = writer.toString();
-        Message message = session.createTextMessage(xml);
+        Message message = session.createObjectMessage(pedido);
         //message.setBooleanProperty("ebook", true);
         producer.send(message);
 
