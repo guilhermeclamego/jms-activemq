@@ -1,8 +1,14 @@
 package br.com.caelum.jms;
 
+import br.com.caelum.modelo.Pedido;
+import br.com.caelum.modelo.PedidoFactory;
+
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.bind.JAXB;
+import java.io.StringWriter;
+
 /*
 Ao executar a mensagem seriá recebida pelo TesteConsumidorTopicoEstoque e
 TesteConsumidorTopicoComercial. Assim, é produzido a mensagem, enviada
@@ -22,7 +28,11 @@ public class TesteProdutorTopico {
         Destination topico = (Destination) context.lookup("loja");
         MessageProducer producer = session.createProducer(topico);
 
-        String xml = ?;
+        Pedido pedido = new PedidoFactory().geraPedidoComValores();
+        StringWriter writer = new StringWriter();
+        JAXB.marshal(pedido, writer); //recebe o pedido e escreve para enviar a string xml
+
+        String xml = writer.toString();
         Message message = session.createTextMessage(xml);
         //message.setBooleanProperty("ebook", true);
         producer.send(message);
