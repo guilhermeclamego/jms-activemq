@@ -7,6 +7,7 @@ import javax.naming.NamingException;
 Ao executar a mensagem seriá recebida pelo TesteConsumidorTopicoEstoque e
 TesteConsumidorTopicoComercial. Assim, é produzido a mensagem, enviada
 e os 2 irão ficar escutando e recebendo essas mensagens enviadas.
+
  */
 public class TesteProdutorTopico {
     public static void main(String[] args) throws NamingException, JMSException {
@@ -21,7 +22,8 @@ public class TesteProdutorTopico {
         Destination topico = (Destination) context.lookup("loja");
         MessageProducer producer = session.createProducer(topico);
 
-        Message message = session.createTextMessage("<pedido><id>222</id></pedido>");
+        Message message = session.createTextMessage("<pedido><id>123</id></pedido>");
+        //message.setBooleanProperty("ebook", true);
         producer.send(message);
 
         session.close();
