@@ -5,7 +5,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.Scanner;
 
-public class TesteProdutor {
+public class TesteConsumidorFila {
     public static void main(String[] args) throws NamingException, JMSException {
 
         InitialContext context = new InitialContext();
@@ -16,13 +16,21 @@ public class TesteProdutor {
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         Destination fila = (Destination) context.lookup("financeiro");
-        MessageProducer producer = session.createProducer(fila);
+        MessageConsumer consumer = session.createConsumer(fila);
 
-        for(int i =0; i < 10; i++){
-            Message message = session.createTextMessage("<pedido><id>"+i+"</id></pedido>");
-            producer.send(message);
-        }
 
+        consumer.setMessageListener(message -> {
+
+            //Pegar apenas a mensagem do envio
+            TextMessage textMessage = (TextMessage) message;
+            try {
+                System.out.println(textMessage.getText());
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        });
+
+        new Scanner(System.in).nextLine();
 
         session.close();
         connection.close();
